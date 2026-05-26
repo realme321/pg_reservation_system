@@ -15,7 +15,7 @@ function App() {
   // FETCH ALL PGS
   useEffect(() => {
 
-    fetch("http://localhost:5000/pgs")
+    fetch("https://pg-reservation-system.onrender.com/pgs")
       .then((res) => res.json())
       .then((data) => setPgs(data));
 
@@ -37,7 +37,7 @@ function App() {
 
     try {
 
-      const response = await fetch("http://localhost:5000/bookings", {
+      const response = await fetch("https://pg-reservation-system.onrender.com/bookings", {
 
         method: "POST",
 
