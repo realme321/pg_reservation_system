@@ -6,7 +6,7 @@ function AdminDashboard() {
 
     useEffect(() => {
 
-        fetch("http://localhost:5000/bookings")
+        fetch("https://pg-reservation-system.onrender.com/bookings")
             .then(res => res.json())
             .then(data => setBookings(data));
 
