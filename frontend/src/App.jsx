@@ -4,6 +4,7 @@ import AdminDashboard from "./AdminDashboard";
 function App() {
 
   const [pgs, setPgs] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -17,7 +18,14 @@ function App() {
 
     fetch("https://pg-reservation-system.onrender.com/pgs")
       .then((res) => res.json())
-      .then((data) => setPgs(data));
+      .then((data) => {
+        setPgs(data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("PGs fetch failed:", err);
+        setLoading(false);
+      });
 
   }, []);
 
@@ -54,7 +62,6 @@ function App() {
 
       alert("Booking Submitted Successfully!");
 
-      // RESET FORM
       setFormData({
         name: "",
         phone: "",
@@ -72,29 +79,26 @@ function App() {
 
   return (
 
-    <div
-      style={{
-        padding: "20px",
-        fontFamily: "Arial"
-      }}
-    >
+    <div style={{ padding: "20px", fontFamily: "Arial" }}>
 
       {/* HEADING */}
-
-      <h1
-        style={{
-          textAlign: "center",
-          marginBottom: "40px"
-        }}
-      >
+      <h1 style={{ textAlign: "center", marginBottom: "40px" }}>
         PG Reservation System
       </h1>
 
       {/* PG LISTINGS */}
-
       <h2>Available PGs</h2>
 
-      {
+      {loading ? (
+
+        <p>⏳ Loading PGs... (backend may be waking up, please wait)</p>
+
+      ) : pgs.length === 0 ? (
+
+        <p>No PGs found.</p>
+
+      ) : (
+
         pgs.map((pg) => (
 
           <div
@@ -112,32 +116,24 @@ function App() {
               src={pg.image}
               alt={pg.name}
               width="300"
-              style={{
-                borderRadius: "10px"
-              }}
+              style={{ borderRadius: "10px" }}
             />
 
             <h2>{pg.name}</h2>
 
-            <p>
-              <b>Location:</b> {pg.location}
-            </p>
+            <p><b>Location:</b> {pg.location}</p>
 
-            <p>
-              <b>Rent:</b> ₹{pg.rent}
-            </p>
+            <p><b>Rent:</b> ₹{pg.rent}</p>
 
-            <p>
-              <b>Beds Available:</b> {pg.bedsAvailable}
-            </p>
+            <p><b>Beds Available:</b> {pg.bedsAvailable}</p>
 
           </div>
 
         ))
-      }
+
+      )}
 
       {/* BOOKING FORM */}
-
       <hr />
 
       <h2>Book Your PG</h2>
@@ -151,10 +147,7 @@ function App() {
           value={formData.name}
           onChange={handleChange}
           required
-          style={{
-            padding: "10px",
-            width: "300px"
-          }}
+          style={{ padding: "10px", width: "300px" }}
         />
 
         <br /><br />
@@ -166,10 +159,7 @@ function App() {
           value={formData.phone}
           onChange={handleChange}
           required
-          style={{
-            padding: "10px",
-            width: "300px"
-          }}
+          style={{ padding: "10px", width: "300px" }}
         />
 
         <br /><br />
@@ -181,10 +171,7 @@ function App() {
           value={formData.pgName}
           onChange={handleChange}
           required
-          style={{
-            padding: "10px",
-            width: "300px"
-          }}
+          style={{ padding: "10px", width: "300px" }}
         />
 
         <br /><br />
@@ -195,10 +182,7 @@ function App() {
           value={formData.moveInDate}
           onChange={handleChange}
           required
-          style={{
-            padding: "10px",
-            width: "300px"
-          }}
+          style={{ padding: "10px", width: "300px" }}
         />
 
         <br /><br />
@@ -220,7 +204,6 @@ function App() {
       </form>
 
       {/* ADMIN DASHBOARD */}
-
       <AdminDashboard />
 
     </div>
